@@ -112,6 +112,14 @@ Dijkstra单源最短路径搜索算法
        	border-radius: 3px;
        	border: 1px solid #3989c5;
        }
+       .int_num{
+       	font-size: 22px;
+       	color: #232323;
+       	width: 30px;
+       	height: 30px;
+       	border-radius: 5px;
+       	background: #eee;
+       }
 	</style>
 <div class="control">
 <div><strong>Dijkstra算法</strong>单源最短路径搜索演示
@@ -330,7 +338,7 @@ mgraph =new Mgraph;
 			//console.log(y2)
 			div.id="Wrap";
 			var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
-			div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#aaa"+" stroke-width="+5+" stroke-dasharray="+"10,10"+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div style="+"left:"+(x1+x2)/2+"px;top:"+(y1+y2)/2+"px;position:fixed;"+" >"+dis+"</vid>"
+			div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#aaa"+" stroke-width="+5+" stroke-dasharray="+"10,10"+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" >"+dis+"</vid>"
 			document.body.appendChild(div);
 	}
 
