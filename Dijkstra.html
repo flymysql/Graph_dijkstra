@@ -185,40 +185,56 @@ function Dijkstra(g,x){
                 dvex=i;
             }
         }
-        var element=document.getElementById(g.vex[dvex]);
-        
-        var now=dvex;
-        var colo="#"+(Math.round(Math.random()*800)+100);
-        element.style.background=colo;
-        var str=x+"到"+g.vex[dvex]+"的最短路径："+g.vex[now];
-        while(now!=vex){
-        	var line1=document.getElementById(g.vex[now]+g.vex[path[now]]);
-        	if (line1==null)
-        		line1=document.getElementById(g.vex[path[now]]+g.vex[now]);
-        	//console.log(line1);
-        	line1.style.stroke=colo;
-            now=path[now];
-            str=str+"<--"+g.vex[now];
+        if(dd==gigantic){
+        	for (var i = 0; i < vexnum; ++i) {
+	            if(dist[i]==dd && !S[i]) {
+	                dvex=i;
+	                break;
+	            }
+	        }
+	        var str="节点"+g.vex[dvex]+"不可达<br><br>"
+	        var descripe=document.getElementById("slider");
+	        descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
+			document.body.appendChild(descripe);
+			index++;
+	        S[dvex]= true;
         }
-        str=str+"<br>总路程:"+dist[dvex]+"<br><br>";
-        
-        var descripe=document.getElementById("slider");
-        descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
-		document.body.appendChild(descripe);
-		index++;
-        S[dvex]= true;
-        for (var k = 0; k < vexnum; ++k) {
-            if (!S[k]){
-                if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
-                    dist[k] = dist[dvex] + g.edge[dvex][k];
-                    path[k] = dvex;
-                }
-            }
+        else{
+			    var element=document.getElementById(g.vex[dvex]);
+		        var now=dvex;
+		        var colo="#"+(Math.round(Math.random()*800)+100);
+		        element.style.background=colo;
+		        var str=x+"到"+g.vex[dvex]+"的最短路径："+g.vex[now];
+		        while(now!=vex){
+		        	var line1=document.getElementById(g.vex[now]+g.vex[path[now]]);
+		        	if (line1==null)
+		        		line1=document.getElementById(g.vex[path[now]]+g.vex[now]);
+		        	//console.log(line1);
+		        	line1.style.stroke=colo;
+		            now=path[now];
+		            str=str+"<--"+g.vex[now];
+		        }
+		        str=str+"<br>总路程:"+dist[dvex]+"<br><br>";
+		        
+		        var descripe=document.getElementById("slider");
+		        descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
+				document.body.appendChild(descripe);
+				index++;
+		        S[dvex]= true;
+		        for (var k = 0; k < vexnum; ++k) {
+		            if (!S[k]){
+		                if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
+		                    dist[k] = dist[dvex] + g.edge[dvex][k];
+		                    path[k] = dvex;
+		                }
+		            }
+		        }        	
         }
+
     	},3000*j);
 
     }
-
+/*
     setTimeout(function(){
         for (var m = 0; m < vexnum; ++m) {
         var nowvex=m;
@@ -232,7 +248,7 @@ function Dijkstra(g,x){
     }
 
     },j*3000+2000)
-
+*/
 
 }
 
