@@ -142,7 +142,7 @@ Dijkstra单源最短路径搜索算法
   </style>
 <div class="control">
 <div><strong>Dijkstra算法</strong>单源最短路径搜索演示
-<a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">详细算法</a><br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）<br><strong>点击路径上的权值可更改权值</strong>输入出发节点，算法演示开始</div>
+<a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">详细算法</a><br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）<br><strong>点击路径上的权值可更改权值</strong>，输入出发节点，算法演示开始</div>
 <input type="button" name="" value="刷新页面" class="refer" onclick="location.reload()">
 <input type="input" name="" id="input_num" value="6" class="int">
 <input type="button" name="" value="生成图" class="refer" onclick="input()">
@@ -186,13 +186,16 @@ function Mgraph() {
 };
 function getVex(G,x){
     var i=0;
-    for(;G.vex[i]!=x;i++);
-    return i;
+    for(;i<G.vexnum;i++){
+    	if(G.vex[i]==x)return i;
+    }
+    if(G.vex[i]!=x)return -1;
 }
 //单源最短路径算法
 function Dijkstra(g,x){
     var vexnum=g.vexnum;
     var vex=getVex(g,x);
+    if (vex==-1) return;
     var dist= new Array();
     var path = new Array();
     path[vex]=vex;
@@ -344,7 +347,7 @@ mgraph =new Mgraph;
       //console.log(y2)
       div.id="Wrap";
       var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
-      div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#aaa"+" stroke-width="+5+" stroke-dasharray="+"10,10"+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
+      div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
       document.body.appendChild(div);
   }
   function link(obj){
@@ -400,7 +403,7 @@ mgraph =new Mgraph;
       gobj.innerText=Number(cnum);
       var ch=document.getElementById("changdiv");
       ch.style.display="none";
-      
+      changenum.value=""
   }
 
   function quxiao(){
