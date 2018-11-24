@@ -462,7 +462,7 @@ mgraph =new Mgraph;
   		var k=0;
   		for (var j = lines - 1; j >= 0; j--) {
   			for (var n = value - 1; n >= 0; n--) {
-  				if (50 > Math.round(Math.random()*100)&&!S[n]) {
+  				if (30 > Math.round(Math.random()*100)&&!S[n]&&k<=lines) {
   				var x="v"+i;
   				var y="v"+n;
   				var having=document.getElementById(y+x);
@@ -474,7 +474,7 @@ mgraph =new Mgraph;
   				mgraph.edge[n][i]=fuck;
   				}
   				S[n]=true;
-  				
+  				k++;
   			}
   			}
   		}
