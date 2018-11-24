@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+	<style type="text/css">
+	      body,html,div,svg{
+          margin:0;
+          padding:0; 
+
+       }
+       #Wrap{
+           position:fixed;
+           height: 0%;
+           width: 100%;
+           user-select:none;
+       }
+       .itemwrap{
+           position: fixed;
+           width:50%;
+           height:50%;
+           left:100px;
+           top:100px;
+       }
+       .item{
+           position: absolute;
+           left:100px;
+           top:100px;
+           border:1px solid #333;
+           height:50px;
+           line-height: 50px;
+           width:50px;
+           text-align: center;
+       }
+       .lineWrap{
+           position: fixed;
+           left:0;
+           overflow:visible;
+       }
+		div.test{
+			width: 50px;
+			height: 50px;
+			background: #49b1f5;
+			border-radius: 50%;
+			border: 5px solid #34aaf1;
+			position: fixed;
+			z-index: 9999999;
+			font-size: 30px;
+			color: #fff;
+			text-align: center;
+			font-weight: 600;
+			/*float: left;*/
+		}
+		#lineWrap{
+           position: fixed;
+           overflow:visible;
+       }
+       .slide{
+       	position: fixed;
+       	top: 20px;
+       	right: 20px;
+       	height: 85%;
+       	width: 300px;
+       	border: 3px solid #49b1f5;
+       	border-radius: 4px;
+       	overflow: auto;
+       }
+
+       .slide_title{
+       	font-size: 20px;
+       	font-weight: 600;
+       	color: #125;
+       	background-color: #eeb;
+       	border-radius: 5px;
+       }
+       .slide_content{
+       	font-size: 15px;
+       	color: #678945;
+       }
+       .slider_line{
+       	position: unset;
+       }
+       #input_num{
+       	height: 30px;
+       	border-radius: 3px;
+       	border: 1px solid #3989c5;
+       }
+       .control{
+       	position: fixed;
+       	margin-top: 10px;
+       	left: 0px;
+       	top: 0px;
+       	width: 80%;
+       	text-align: center;
+       }
+       .refer{
+       	height: 30px;
+       	background: #49b1f5;
+       	border-radius: 3px;
+       	border: 1px solid #3989c5;
+       }
+	</style>
+<div class="control">
+<div><strong>Dijkstra算法</strong>单源最短路径搜索演示<br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）</div>
+<input type="input" name="" id="input_num" value="6">
+<input type="button" name="" value="生成图" class="refer" onclick="input()">
+<input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">	
+</div>
+
+<div class="slide" id="slider">
+	
+</div>
+
+<script type="text/javascript">
+var onlink=false;
+var onid="";
+var MaxvertextType = 100
+var gigantic = 99999
+
+
+/*
+	Dijkstra算法	
+*/
+
+//邻接矩阵
+function Mgraph() {
+    this.vex=new Array();
+    this.edge=new Array();
+    this.vexnum=0;
+    this.arcnum=0;
+};
+
+function getVex(G,x){
+    var i=0;
+    for(;G.vex[i]!=x;i++);
+    return i;
+}
+
+//单源最短路径算法
+function Dijkstra(g,x){
+    var vexnum=g.vexnum;
+    var vex=getVex(g,x);
+    var dist= new Array();
+    var path = new Array();
+    path[0]=0;
+    for (var i = 0; i < vexnum; ++i) {
+        dist[i]=g.edge[vex][i];
+        if(dist[i]!=gigantic)path[i]=0;
+    }
+    var S = new Array();
+    S[0] = true;
+    var dd;
+    var dvex=0;
+    var j = 0;
+    var index=1;
+    for (; j < vexnum-1; ++j) {
+    	setTimeout(function(){
+    	dd=gigantic;
+        for (var i = 1; i < vexnum; ++i) {
+            if(dist[i]<dd && !S[i]) {
+                dd=dist[i];
+                dvex=i;
+            }
+        }
+        var element=document.getElementById(g.vex[dvex]);
+        element.style.background="green";
+        var now=dvex;
+        var colo="#"+(Math.round(Math.random()*800)+100);
+        var str=x+"到"+g.vex[dvex]+"的最短路径："+g.vex[now];
+        while(now!=0){
+        	var line1=document.getElementById(g.vex[now]+g.vex[path[now]]);
+        	if (line1==null)
+        		line1=document.getElementById(g.vex[path[now]]+g.vex[now]);
+        	//console.log(line1);
+        	line1.style.stroke=colo;
+            now=path[now];
+            str=str+"<--"+g.vex[now];
+        }
+        str=str+"<br>总路程:"+dist[dvex]+"<br><br>";
+        
+        var descripe=document.getElementById("slider");
+        descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
+		document.body.appendChild(descripe);
+		index++;
+        S[dvex]= true;
+        for (var k = 1; k < vexnum; ++k) {
+            if (!S[k]){
+                if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
+                    dist[k] = dist[dvex] + g.edge[dvex][k];
+                    path[k] = dvex;
+                }
+            }
+        }
+    	},3000*j);
+
+    }
+
+    setTimeout(function(){
+        for (var m = 1; m < vexnum; ++m) {
+        var nowvex=m;
+        var str="\npath:"+g.vex[nowvex];
+        while(path[nowvex]!=vex){
+            nowvex=path[nowvex];
+            str=str+"<-"+g.vex[nowvex];
+        }
+        str=str+"<-"+g.vex[vex]+"\tdistance:"+dist[m];
+        console.log(str);
+    }
+
+    },j*3000+2000)
+
+
+}
+
+
+//图的初始化
+function init(g){
+    for(var i=0;i<g.vexnum;i++){
+        var temp=[];
+        for (var j = 0; j < g.vexnum; ++j) {
+            if (i==j) temp[j]=0;
+            else temp[j]=gigantic;
+        }
+        g.edge[i]=temp;
+    }
+}
+
+//先创建一个全局图
+mgraph =new Mgraph;
+
+
+/*
+	图形化部分
+*/
+　　function getElementLeft(element){
+　　　　var actualLeft = element.offsetLeft;
+　　　　var current = element.offsetParent;
+
+　　　　while (current !== null){
+　　　　　　actualLeft += current.offsetLeft;
+　　　　　　current = current.offsetParent;
+　　　　}
+
+　　　　return actualLeft;
+　　}
+
+　　function getElementTop(element){
+　　　　var actualTop = element.offsetTop;
+　　　　var current = element.offsetParent;
+
+　　　　while (current !== null){
+　　　　　　actualTop += current.offsetTop;
+　　　　　　current = current.offsetParent;
+　　　　}
+
+　　　　return actualTop;
+　　}
+
+	function input() {
+		if(mgraph.vexnum==0){
+			var oinput=document.getElementById('input_num');
+			var num=oinput.value;
+			mgraph.vexnum=num;
+			init(mgraph);
+			//初始化
+			for (var i = 0; i < num; i++) {
+				var vex="v"+i;
+				mgraph.vex[i]=vex;
+				var div = document.createElement("div");
+				var ang=(360/num)*i;
+				var x=40 + Math.cos(ang * (Math.PI / 180)) * 30;
+				var y=50 + Math.sin(ang * (Math.PI / 180)) * 30;
+				//console.log((pai/num)*i)
+				
+				div.innerHTML = "<div id="+vex+" style="+"left:"+x+"%;"+"top:"+y+"%;"+" class="+"test"+" onclick=link(this)>"+vex+"</div>";
+				document.body.appendChild(div);
+			}	
+		}
+	}
+
+	function creatline(id1,id2,dis){
+
+			var div = document.createElement("div");
+			var ele1=document.getElementById(id1);
+			var x1=getElementLeft(ele1);
+			var y1=getElementTop(ele1);
+			var ele2=document.getElementById(id2);
+			var x2=getElementLeft(ele2);
+			var y2=getElementTop(ele2);
+			//console.log(y2)
+			div.id="Wrap";
+			var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
+			div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#aaa"+" stroke-width="+5+" stroke-dasharray="+"10,10"+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div style="+"left:"+(x1+x2)/2+"px;top:"+(y1+y2)/2+"px;position:fixed;"+" >"+dis+"</vid>"
+			document.body.appendChild(div);
+	}
+
+	function link(obj){
+		var oid=obj.id;
+		
+		if(oid!=onid&&onlink){
+			
+			//生成随机路径长度
+			var dis=Math.round(Math.random()*15)+1;
+			var x1=getVex(mgraph,oid);
+			var y1=getVex(mgraph,onid);
+			if(mgraph.edge[x1][y1]==gigantic){
+				console.log(dis);
+				creatline(oid,onid,dis);
+				//无向图的连线
+				mgraph.edge[x1][y1]=dis;
+				mgraph.edge[y1][x1]=dis;	
+			}
+			onlink=false;
+			onid="";
+		}
+		else if(!onlink) {
+			onid=obj.id;
+			onlink=true;
+		}
+	}
+
+
+	function createPath(){
+		Dijkstra(mgraph,"v0");
+	}
+
+
+</script>
+
+</body>
+</html>
