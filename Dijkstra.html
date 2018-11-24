@@ -149,6 +149,7 @@ Dijkstra单源最短路径搜索算法
 <input type="button" name="" value="生成节点" class="refer" onclick="input()">
 <input type="input" name="" id="begin" value="v0" class="int">
 <input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">
+<input type="button" name="" value="随机生成一个图" class="refer" onclick="randomCreate()">
 </div>
 <div class="changdiv" id="changdiv">
   输入权值并按确定更改<br>
@@ -448,31 +449,40 @@ mgraph =new Mgraph;
   	}
   }
 
-  
+  function randomCreate(){
+  	cleanele();
+  	var inputnum=document.getElementById("input_num");
+  	var value=Math.round(Math.random()*4)+4;
+  	input_num.value=value;
+  	input();
+  	for (var i = value - 1; i >= 0; i--) {
+  		var lines=Math.round(Math.random()*2)+1;
+  		var S=new Array();
+  		for (var m = value - 1; m >= 0; m--) S[i]=false;
+  		var k=0;
+  		for (var j = lines - 1; j >= 0; j--) {
+  			for (var n = value - 1; n >= 0; n--) {
+  				if (50 > Math.round(Math.random()*100)&&!S[n]) {
+  				var x="v"+i;
+  				var y="v"+n;
+  				var having=document.getElementById(y+x);
+  				if(having==null){
+
+  				var fuck=Math.round(Math.random()*15)+1;
+  				creatline(x,y,fuck);
+  				mgraph.edge[i][n]=fuck;
+  				mgraph.edge[n][i]=fuck;
+  				}
+  				S[n]=true;
+  				
+  			}
+  			}
+  		}
+  	}
+  }
 
   window.onload=function(){
-  	input();
-  	creatline("v3","v1",4);
-  	creatline("v0","v4",9);
-  	creatline("v2","v1",11);
-  	creatline("v5","v1",2);
-  	creatline("v0","v2",10);
-  	creatline("v2","v5",7);
-  	creatline("v3","v5",3);
-  	mgraph.edge[3][1]=4;
-  	mgraph.edge[0][4]=9;
-  	mgraph.edge[2][1]=11;
-  	mgraph.edge[5][1]=2;
-  	mgraph.edge[0][2]=10;
-  	mgraph.edge[2][5]=7;
-  	mgraph.edge[3][5]=3;
-  	mgraph.edge[1][3]=4;
-  	mgraph.edge[4][0]=9;
-  	mgraph.edge[1][2]=11;
-  	mgraph.edge[1][5]=2;
-  	mgraph.edge[2][0]=10;
-  	mgraph.edge[5][2]=7;
-  	mgraph.edge[5][3]=3;
+  	randomCreate();
   }
 
 </script>
