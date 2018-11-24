@@ -7,7 +7,7 @@
 
 演示地址:https://me.idealli.com/others/Dijkstra.html
 
-![兰州小红鸡](https://picture-1256429518.cos.ap-chengdu.myqcloud.com/blog/112401.png)
+![兰州小红鸡](https://picture-1256429518.cos.ap-chengdu.myqcloud.com/blog/112402.png)
 
 
 先看下算法的描述

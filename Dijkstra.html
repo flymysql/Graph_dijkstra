@@ -143,9 +143,10 @@ Dijkstra单源最短路径搜索算法
 <div class="control">
 <div><strong>Dijkstra算法</strong>单源最短路径搜索演示
 <a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">详细算法</a><br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）<br><strong>点击路径上的权值可更改权值</strong>，输入出发节点，算法演示开始</div>
-<input type="button" name="" value="刷新页面" class="refer" onclick="location.reload()">
+<input type="button" name="" value="清空页面" class="refer" onclick="cleanele()">
+<input type="button" name="" value="清空连线" class="refer" onclick="cleanline()">
 <input type="input" name="" id="input_num" value="6" class="int">
-<input type="button" name="" value="生成图" class="refer" onclick="input()">
+<input type="button" name="" value="生成节点" class="refer" onclick="input()">
 <input type="input" name="" id="begin" value="v0" class="int">
 <input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">
 </div>
@@ -157,7 +158,8 @@ Dijkstra单源最短路径搜索算法
 </div>
 <div class="slide" id="slider">
 </div>
-
+<div id="Wrap"></div>
+<div id="divele"></div>
 <!-- 
 作者：兰州小红鸡
 Dijkstra单源最短路径搜索算法
@@ -193,6 +195,7 @@ function getVex(G,x){
 }
 //单源最短路径算法
 function Dijkstra(g,x){
+	cleancolor();
     var vexnum=g.vexnum;
     var vex=getVex(g,x);
     if (vex==-1) return;
@@ -210,6 +213,8 @@ function Dijkstra(g,x){
     var dvex=0;
     var j = 0;
     var index=1;
+    var descripe=document.getElementById("slider");
+    descripe.innerHTML="";
     for (; j < vexnum-1; ++j) {
       setTimeout(function(){
       dd=gigantic;
@@ -227,7 +232,7 @@ function Dijkstra(g,x){
               }
           }
           var str="节点"+g.vex[dvex]+"不可达<br><br>"
-          var descripe=document.getElementById("slider");
+          
           descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
       document.body.appendChild(descripe);
       index++;
@@ -249,8 +254,6 @@ function Dijkstra(g,x){
                 str=str+"<--"+g.vex[now];
             }
             str=str+"<br>总路程:"+dist[dvex]+"<br><br>";
-            
-            var descripe=document.getElementById("slider");
             descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
         document.body.appendChild(descripe);
         index++;
@@ -325,19 +328,20 @@ mgraph =new Mgraph;
       for (var i = 0; i < num; i++) {
         var vex="v"+i;
         mgraph.vex[i]=vex;
-        var div = document.createElement("div");
+        var div = document.getElementById("divele");
         var ang=(360/num)*i;
         var x=40 + Math.cos(ang * (Math.PI / 180)) * 30;
         var y=50 + Math.sin(ang * (Math.PI / 180)) * 30;
         //console.log((pai/num)*i)
         
-        div.innerHTML = "<div id="+vex+" style="+"left:"+x+"%;"+"top:"+y+"%;"+" class="+"test"+" onclick=link(this)>"+vex+"</div>";
+        div.innerHTML = div.innerHTML + "<div id="+vex+" style="+"left:"+x+"%;"+"top:"+y+"%;"+" class="+"test"+" onclick=link(this)>"+vex+"</div>";
         document.body.appendChild(div);
       } 
     }
   }
+
   function creatline(id1,id2,dis){
-      var div = document.createElement("div");
+      var div = document.getElementById("Wrap");
       var ele1=document.getElementById(id1);
       var x1=getElementLeft(ele1)+25;
       var y1=getElementTop(ele1)+25;
@@ -345,11 +349,11 @@ mgraph =new Mgraph;
       var x2=getElementLeft(ele2)+25;
       var y2=getElementTop(ele2)+25;
       //console.log(y2)
-      div.id="Wrap";
       var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
-      div.innerHTML = "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
+      div.innerHTML = div.innerHTML+ "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
       document.body.appendChild(div);
   }
+
   function link(obj){
     var oid=obj.id;
     
@@ -412,6 +416,65 @@ mgraph =new Mgraph;
     gx="";
     gy="";
   }
+
+  function cleanline(){
+  	var div = document.getElementById("Wrap");
+  	div.innerHTML="";
+  	init(mgraph);
+  	var descripe=document.getElementById("slider");
+    descripe.innerHTML="";
+  	cleancolor();
+  }
+
+  function cleanele(){
+  	var div = document.getElementById("divele");
+  	div.innerHTML="";
+  	cleanline();
+  	mgraph.vexnum=0;
+  	var descripe=document.getElementById("slider");
+    descripe.innerHTML="";
+  }
+
+  function cleancolor(){
+  	var div=document.getElementById("divele")
+  	var ele=div.getElementsByTagName("div")
+  	for (var i = ele.length - 1; i >= 0; i--) {
+  		ele[i].style.background="#49b1f5";
+  	}
+  	var line = document.getElementById("Wrap");
+  	var linele = line.getElementsByTagName("line")
+  	for (var i = linele.length - 1; i >= 0; i--) {
+  		linele[i].style.stroke="#ddd";
+  	}
+  }
+
+  
+
+  window.onload=function(){
+  	input();
+  	creatline("v3","v1",4);
+  	creatline("v0","v4",9);
+  	creatline("v2","v1",11);
+  	creatline("v5","v1",2);
+  	creatline("v0","v2",10);
+  	creatline("v2","v5",7);
+  	creatline("v3","v5",3);
+  	mgraph.edge[3][1]=4;
+  	mgraph.edge[0][4]=9;
+  	mgraph.edge[2][1]=11;
+  	mgraph.edge[5][1]=2;
+  	mgraph.edge[0][2]=10;
+  	mgraph.edge[2][5]=7;
+  	mgraph.edge[3][5]=3;
+  	mgraph.edge[1][3]=4;
+  	mgraph.edge[4][0]=9;
+  	mgraph.edge[1][2]=11;
+  	mgraph.edge[1][5]=2;
+  	mgraph.edge[2][0]=10;
+  	mgraph.edge[5][2]=7;
+  	mgraph.edge[5][3]=3;
+  }
+
 </script>
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
