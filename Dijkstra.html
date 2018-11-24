@@ -84,8 +84,9 @@
        .slider_line{
        	position: unset;
        }
-       #input_num{
-       	height: 30px;
+       .int{
+       	height: 26px;
+       	width: 80px;
        	border-radius: 3px;
        	border: 1px solid #3989c5;
        }
@@ -105,10 +106,12 @@
        }
 	</style>
 <div class="control">
-<div><strong>Dijkstra算法</strong>单源最短路径搜索演示<br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）</div>
-<input type="input" name="" id="input_num" value="6">
+<div><strong>Dijkstra算法</strong>单源最短路径搜索演示
+<a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">详细算法</a><br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）输入出发节点，算法演示开始</div>
+<input type="input" name="" id="input_num" value="6" class="int">
 <input type="button" name="" value="生成图" class="refer" onclick="input()">
-<input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">	
+<input type="input" name="" id="begin" value="v0" class="int">
+<input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">
 </div>
 
 <div class="slide" id="slider">
@@ -146,13 +149,14 @@ function Dijkstra(g,x){
     var vex=getVex(g,x);
     var dist= new Array();
     var path = new Array();
-    path[0]=0;
+    path[vex]=vex;
     for (var i = 0; i < vexnum; ++i) {
         dist[i]=g.edge[vex][i];
-        if(dist[i]!=gigantic)path[i]=0;
+        if(g.edge[vex][i]!=gigantic)path[i]=vex;
     }
+    console.log(dist)
     var S = new Array();
-    S[0] = true;
+    S[vex] = true;
     var dd;
     var dvex=0;
     var j = 0;
@@ -160,18 +164,19 @@ function Dijkstra(g,x){
     for (; j < vexnum-1; ++j) {
     	setTimeout(function(){
     	dd=gigantic;
-        for (var i = 1; i < vexnum; ++i) {
+        for (var i = 0; i < vexnum; ++i) {
             if(dist[i]<dd && !S[i]) {
                 dd=dist[i];
                 dvex=i;
             }
         }
         var element=document.getElementById(g.vex[dvex]);
-        element.style.background="green";
+        
         var now=dvex;
         var colo="#"+(Math.round(Math.random()*800)+100);
+        element.style.background=colo;
         var str=x+"到"+g.vex[dvex]+"的最短路径："+g.vex[now];
-        while(now!=0){
+        while(now!=vex){
         	var line1=document.getElementById(g.vex[now]+g.vex[path[now]]);
         	if (line1==null)
         		line1=document.getElementById(g.vex[path[now]]+g.vex[now]);
@@ -187,7 +192,7 @@ function Dijkstra(g,x){
 		document.body.appendChild(descripe);
 		index++;
         S[dvex]= true;
-        for (var k = 1; k < vexnum; ++k) {
+        for (var k = 0; k < vexnum; ++k) {
             if (!S[k]){
                 if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
                     dist[k] = dist[dvex] + g.edge[dvex][k];
@@ -200,7 +205,7 @@ function Dijkstra(g,x){
     }
 
     setTimeout(function(){
-        for (var m = 1; m < vexnum; ++m) {
+        for (var m = 0; m < vexnum; ++m) {
         var nowvex=m;
         var str="\npath:"+g.vex[nowvex];
         while(path[nowvex]!=vex){
@@ -286,11 +291,11 @@ mgraph =new Mgraph;
 
 			var div = document.createElement("div");
 			var ele1=document.getElementById(id1);
-			var x1=getElementLeft(ele1);
-			var y1=getElementTop(ele1);
+			var x1=getElementLeft(ele1)+25;
+			var y1=getElementTop(ele1)+25;
 			var ele2=document.getElementById(id2);
-			var x2=getElementLeft(ele2);
-			var y2=getElementTop(ele2);
+			var x2=getElementLeft(ele2)+25;
+			var y2=getElementTop(ele2)+25;
 			//console.log(y2)
 			div.id="Wrap";
 			var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
@@ -325,11 +330,14 @@ mgraph =new Mgraph;
 
 
 	function createPath(){
-		Dijkstra(mgraph,"v0");
+		var begin=document.getElementById("begin");
+		var bd=begin.value;
+		Dijkstra(mgraph,bd);
 	}
 
 
 </script>
-
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
 </html>
