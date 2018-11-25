@@ -394,7 +394,7 @@ var content="";
       var y2=getElementTop(ele2)+25;
       //console.log(y2)
       var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
-      div.innerHTML = div.innerHTML+ "<svg class=lineWrap id=line"+id1+id2+"><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" onclick=changnum("+id1+","+id2+",this) stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
+      div.innerHTML = div.innerHTML+ "<svg class=lineWrap id=line"+id1+id2+"><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
       document.body.appendChild(div);
   }
 
@@ -479,7 +479,7 @@ var content="";
 	var x=getVex(mgraph,gx);
     var y=getVex(mgraph,gy);
     mgraph.edge[x][y]=gigantic;
-    mgraph.edge[y][x]=gigantic;  
+    mgraph.edge[y][x]=gigantic;
 	var ch=document.getElementById("changdiv");
     ch.style.display="none";
   }
