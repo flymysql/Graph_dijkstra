@@ -68,9 +68,10 @@ Dijkstra单源最短路径搜索算法
        .slide{
         position: fixed;
         top: 20px;
-        right: 20px;
-        height: 85%;
-        width: 300px;
+        right: 5px;
+        height: 90%;
+        padding-left: 5px;
+        width: 22%;
         border: 3px solid #49b1f5;
         border-radius: 4px;
         overflow: auto;
@@ -139,10 +140,18 @@ Dijkstra单源最短路径搜索算法
           height: 30px;
           border: 3px solid #49b1f5
        }
+  
+       	a:link {color:#000000;text-decoration:none;}      /* 未访问链接*/
+		a:visited {color:#000;text-decoration:none;}  /* 已访问链接 */
+		a:hover {color:#000;text-decoration:underline;}  /* 鼠标移动到链接上 */
+		a:active {color:#000;}  /* 鼠标点击时 */
+
   </style>
 <div class="control">
-<div><strong>Dijkstra算法</strong>单源最短路径搜索演示
-<a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">详细算法</a><br>输入节点数生成图，点击不同的节点生成链路（链路的权值将会随机生成）<br><strong>点击路径上的权值可更改权值</strong>，输入出发节点，算法演示开始</div>
+<h2><strong>Dijkstra算法</strong>单源最短路径搜索演示
+<!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/flymysql/Graph_dijkstra" data-icon="octicon-star"  data-show-count="true" aria-label="Star flymysql/Graph_dijkstra on GitHub">Star</a>
+</h2>
 <input type="button" name="" value="清空页面" class="refer" onclick="cleanele()">
 <input type="button" name="" value="清空连线" class="refer" onclick="cleanline()">
 <input type="input" name="" id="input_num" value="6" class="int">
@@ -154,10 +163,23 @@ Dijkstra单源最短路径搜索算法
 <div class="changdiv" id="changdiv">
   输入权值并按确定更改<br>
   <input type="input" name="" id="cnum"><br>
-  <br><div class="tochange" id="quxiao" onclick="quxiao()">取消</div><br>
-  <div class="tochange" id="onchange" onclick="ok()">确定</div>
+  <br>
+  <div class="tochange" type="button" id="quxiao" onclick="quxiao()">取消</div><br>
+  <div class="tochange" type="button" id="onchange" onclick="ok()">更改</div><br>
+  <div class="tochange" type="button" style="background: rgb(190, 240, 81)" id="delete" onclick="deleteline()">删除该链路</div>
 </div>
 <div class="slide" id="slider">
+  <h1>操作说明</h1>
+  <strong>生成节点</strong><p>输入节点数后点击生成节点</p>
+  <strong>生成链路</strong><p>鼠标点击两个节点之后即可生成链路</p>
+  <strong>修改链路权值</strong><p>鼠标点击链路权值，在弹框中修改，也可以在弹框中选择删除该链路</p>
+  <strong>生成最短路径</strong><p>输入出发节点后点击生成，即可开始动态演示路径查找</p>
+  <strong>算法讲解</strong><p><a href="https://me.idealli.com/post/15e41f53.html" target="_blank">Dijkstra单源最短路径——小鸡博客</a></p><p>
+  <strong>源码地址</strong>
+  <a class="github-button" href="https://github.com/flymysql/Graph_dijkstra/fork" data-icon="octicon-repo-forked"  aria-label="Fork flymysql/Graph_dijkstra on GitHub">Fork</a>
+<a class="github-button" href="https://github.com/flymysql"  data-show-count="true" aria-label="Follow @flymysql on GitHub">Follow</a>
+ </p>
+  
 </div>
 <div id="Wrap"></div>
 <div id="divele"></div>
@@ -312,6 +334,7 @@ function init(g){
 
 //先创建一个全局图
 mgraph =new Mgraph;
+var content="";
 
 	//获取X轴坐标
 　　function getElementLeft(element){
@@ -338,7 +361,7 @@ mgraph =new Mgraph;
 
 //节点渲染
   function input() {
-    if(mgraph.vexnum==0){
+      if(mgraph.vexnum==0){
       var oinput=document.getElementById('input_num');
       var num=oinput.value;
       mgraph.vexnum=num;
@@ -357,6 +380,7 @@ mgraph =new Mgraph;
         document.body.appendChild(div);
       } 
     }
+    else alert("\n\n请先清空页面上的已有节点！")
   }
 
 //链路线条渲染
@@ -370,7 +394,7 @@ mgraph =new Mgraph;
       var y2=getElementTop(ele2)+25;
       //console.log(y2)
       var size=" x1="+x1+" y1="+y1+" x2="+x2+" y2="+y2;
-      div.innerHTML = div.innerHTML+ "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
+      div.innerHTML = div.innerHTML+ "<svg class=lineWrap id=line"+id1+id2+"><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" onclick=changnum("+id1+","+id2+",this) stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
       document.body.appendChild(div);
   }
 
@@ -379,7 +403,11 @@ mgraph =new Mgraph;
     var oid=obj.id;
     
     if(oid!=onid&&onlink){
-      
+      var onclolor=document.getElementById(onid);
+      onclolor.style.background="#49b1f5";
+      onclolor.style.height="50px";
+      onclolor.style.width="50px";
+     // onclolor.style.font-size="30px";
       //生成随机路径长度
       var dis=Math.round(Math.random()*15)+1;
       var x1=getVex(mgraph,oid);
@@ -397,6 +425,10 @@ mgraph =new Mgraph;
     else if(!onlink) {
       onid=obj.id;
       onlink=true;
+      obj.style.background="green";
+      obj.style.height="70px";
+      obj.style.width="70px";
+     // obj.style.font-size="40px";
     }
   }
 
@@ -436,6 +468,22 @@ mgraph =new Mgraph;
       changenum.value=""
   }
 
+  //删除链路
+  function deleteline(){
+  	var div = document.getElementById("Wrap");
+  	var line=document.getElementById("line"+gx+gy);
+  	div.removeChild(line);
+  	div.removeChild(gobj);
+  	// line.style.display="none";
+  	// gobj.style.display="none";
+	var x=getVex(mgraph,gx);
+    var y=getVex(mgraph,gy);
+    mgraph.edge[x][y]=gigantic;
+    mgraph.edge[y][x]=gigantic;  
+	var ch=document.getElementById("changdiv");
+    ch.style.display="none";
+  }
+
   //取消修改权值
   function quxiao(){
     var ch=document.getElementById("changdiv");
@@ -450,7 +498,7 @@ mgraph =new Mgraph;
   	div.innerHTML="";
   	init(mgraph);
   	var descripe=document.getElementById("slider");
-    descripe.innerHTML="";
+    descripe.innerHTML=content;
   	cleancolor();
   }
 
@@ -461,7 +509,7 @@ mgraph =new Mgraph;
   	cleanline();
   	mgraph.vexnum=0;
   	var descripe=document.getElementById("slider");
-    descripe.innerHTML="";
+    descripe.innerHTML=content;
   }
 
 
@@ -512,9 +560,12 @@ mgraph =new Mgraph;
   		}
   	}
   }
-
-  window.onload=function(){
+  
+window.onload=function(){
+  	var descripe=document.getElementById("slider");
+    content=descripe.innerHTML;
   	randomCreate();
+  	descripe.innerHTML=content;
   }
 
 </script>
