@@ -38,109 +38,70 @@ Dijkstra提出按各顶点与源点v间的路径长度的递增次序，生成�
 
 ```java
 
-var onlink=false;
-var onid="";
 var MaxvertextType = 100
 var gigantic = 99999
 
-var gx=""
-var gy=""
-var gobj
-/*
-  Dijkstra算法  
-*/
 //邻接矩阵
 function Mgraph() {
     this.vex=new Array();
     this.edge=new Array();
-    this.vexnum=0;
-    this.arcnum=0;
+    this.vexnum=MaxvertextType;
+    this.arcnum=MaxvertextType;
 };
+
 function getVex(G,x){
     var i=0;
-    for(;i<G.vexnum;i++){
-    	if(G.vex[i]==x)return i;
-    }
-    if(G.vex[i]!=x)return -1;
+    for(;G.vex[i]!=x;i++);
+    return i;
 }
+
+
 //单源最短路径算法
 function Dijkstra(g,x){
-	cleancolor();
     var vexnum=g.vexnum;
     var vex=getVex(g,x);
-    if (vex==-1) return;
     var dist= new Array();
     var path = new Array();
-    path[vex]=vex;
+    path[0]=0;
     for (var i = 0; i < vexnum; ++i) {
         dist[i]=g.edge[vex][i];
-        if(g.edge[vex][i]!=gigantic)path[i]=vex;
+        if(dist[i]!=gigantic)path[i]=0;
     }
-    console.log(dist)
     var S = new Array();
-    S[vex] = true;
+    S[0] = true;
     var dd;
     var dvex=0;
-    var j = 0;
-    var index=1;
-    var descripe=document.getElementById("slider");
-    descripe.innerHTML="";
-    for (; j < vexnum-1; ++j) {
-      setTimeout(function(){
-      dd=gigantic;
-        for (var i = 0; i < vexnum; ++i) {
+    for (var j = 0; j < vexnum-1; ++j) {
+        dd=gigantic;
+        for (var i = 1; i < vexnum; ++i) {
             if(dist[i]<dd && !S[i]) {
                 dd=dist[i];
                 dvex=i;
             }
         }
-        if(dd==gigantic){
-          for (var i = 0; i < vexnum; ++i) {
-              if(dist[i]==dd && !S[i]) {
-                  dvex=i;
-                  break;
-              }
-          }
-          var str="节点"+g.vex[dvex]+"不可达<br><br>"
-          
-          descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
-      document.body.appendChild(descripe);
-      index++;
-          S[dvex]= true;
-        }
-        else{
-          var element=document.getElementById(g.vex[dvex]);
-            var now=dvex;
-            var colo="#"+(Math.round(Math.random()*800)+100);
-            element.style.background=colo;
-            var str=x+"到"+g.vex[dvex]+"的最短路径："+g.vex[now];
-            while(now!=vex){
-              var line1=document.getElementById(g.vex[now]+g.vex[path[now]]);
-              if (line1==null)
-                line1=document.getElementById(g.vex[path[now]]+g.vex[now]);
-              //console.log(line1);
-              line1.style.stroke=colo;
-                now=path[now];
-                str=str+"<--"+g.vex[now];
-            }
-            str=str+"<br>总路程:"+dist[dvex]+"<br><br>";
-            descripe.innerHTML = descripe.innerHTML+"<div class=slider_line><div class=slide_title>第"+index+"趟</div><div class=slide_content>"+str+"</div></div>";
-        document.body.appendChild(descripe);
-        index++;
-            S[dvex]= true;
-            for (var k = 0; k < vexnum; ++k) {
-                if (!S[k]){
-                    if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
-                        dist[k] = dist[dvex] + g.edge[dvex][k];
-                        path[k] = dvex;
-                    }
+        S[dvex]= true;
+        for (var k = 1; k < vexnum; ++k) {
+            if (!S[k]){
+                if (dist[dvex]+g.edge[dvex][k]<dist[k]) {
+                    dist[k] = dist[dvex] + g.edge[dvex][k];
+                    path[k] = dvex;
                 }
-            }         
+            }
         }
-      },3000*j);
     }
-
+    for (var m = 1; m < vexnum; ++m) {
+        var nowvex=m;
+        var str="\npath:"+g.vex[nowvex];
+        while(path[nowvex]!=0){
+            nowvex=path[nowvex];
+            str=str+"<-"+g.vex[nowvex];
+        }
+        str=str+"<-"+g.vex[0]+"\tdistance:"+dist[m];
+        console.log(str);
+    }
 }
+
+
 //图的初始化
 function init(g){
     for(var i=0;i<g.vexnum;i++){
@@ -152,14 +113,11 @@ function init(g){
         g.edge[i]=temp;
     }
 }
-//先创建一个全局图
-mgraph =new Mgraph;
 
 ```
 
 感觉代码还是有点臃肿了
-晚点打算再写一个JavaScript实现的算法
-结合html来制作图形界面
+
 
 
 

@@ -177,9 +177,15 @@ var gigantic = 99999
 var gx=""
 var gy=""
 var gobj
+
+
+/*******************************************
+           算法部分
+********************************************/
 /*
   Dijkstra算法  
 */
+
 //邻接矩阵
 function Mgraph() {
     this.vex=new Array();
@@ -285,6 +291,7 @@ function Dijkstra(g,x){
     },j*3000+2000)
 */
 }
+
 //图的初始化
 function init(g){
     for(var i=0;i<g.vexnum;i++){
@@ -296,11 +303,17 @@ function init(g){
         g.edge[i]=temp;
     }
 }
+
+
+/*******************************************
+           图形化部分
+********************************************/
+
+
 //先创建一个全局图
 mgraph =new Mgraph;
-/*
-  图形化部分
-*/
+
+	//获取X轴坐标
 　　function getElementLeft(element){
 　　　　var actualLeft = element.offsetLeft;
 　　　　var current = element.offsetParent;
@@ -310,6 +323,8 @@ mgraph =new Mgraph;
 　　　　}
 　　　　return actualLeft;
 　　}
+
+	//获取y轴坐标
 　　function getElementTop(element){
 　　　　var actualTop = element.offsetTop;
 　　　　var current = element.offsetParent;
@@ -319,6 +334,9 @@ mgraph =new Mgraph;
 　　　　}
 　　　　return actualTop;
 　　}
+
+
+//节点渲染
   function input() {
     if(mgraph.vexnum==0){
       var oinput=document.getElementById('input_num');
@@ -341,6 +359,7 @@ mgraph =new Mgraph;
     }
   }
 
+//链路线条渲染
   function creatline(id1,id2,dis){
       var div = document.getElementById("Wrap");
       var ele1=document.getElementById(id1);
@@ -354,6 +373,7 @@ mgraph =new Mgraph;
       div.innerHTML = div.innerHTML+ "<svg class=lineWrap><line id="+id1+id2+" "+size+ " xmlns="+"http://www.w3.org/2000/svg"+" stroke="+"#ddd"+" stroke-width="+5+" marker-end="+"url(#arrow)"+"></line></svg>"+"<div class=int_num style="+"left:"+(x1+(x2-x1)/2.5)+"px;top:"+(y1+(y2-y1)/2.5)+"px;position:fixed;"+" onclick=changnum("+id1+","+id2+",this)>"+dis+"</div>"
       document.body.appendChild(div);
   }
+
 
   function link(obj){
     var oid=obj.id;
@@ -379,12 +399,15 @@ mgraph =new Mgraph;
       onlink=true;
     }
   }
+
+  //开始搜索路径
   function createPath(){
     var begin=document.getElementById("begin");
     var bd=begin.value;
     Dijkstra(mgraph,bd);
   }
 
+  //修改链路权值弹框
   function changnum(x,y,obj){
       var ch=document.getElementById("changdiv");
       ch.style.display="block";
@@ -394,6 +417,8 @@ mgraph =new Mgraph;
       gobj=obj;
   }
 
+
+  //修改权值后点击确定事件
   function ok(){
       var changenum=document.getElementById("cnum");
       var cnum=Number(changenum.value);
@@ -411,6 +436,7 @@ mgraph =new Mgraph;
       changenum.value=""
   }
 
+  //取消修改权值
   function quxiao(){
     var ch=document.getElementById("changdiv");
     ch.style.display="none";
@@ -418,6 +444,7 @@ mgraph =new Mgraph;
     gy="";
   }
 
+  //清空链路
   function cleanline(){
   	var div = document.getElementById("Wrap");
   	div.innerHTML="";
@@ -427,6 +454,7 @@ mgraph =new Mgraph;
   	cleancolor();
   }
 
+  //清空节点
   function cleanele(){
   	var div = document.getElementById("divele");
   	div.innerHTML="";
@@ -436,6 +464,8 @@ mgraph =new Mgraph;
     descripe.innerHTML="";
   }
 
+
+  //清空颜色
   function cleancolor(){
   	var div=document.getElementById("divele")
   	var ele=div.getElementsByTagName("div")
@@ -449,6 +479,8 @@ mgraph =new Mgraph;
   	}
   }
 
+
+  //随机生成一个图
   function randomCreate(){
   	cleanele();
   	var inputnum=document.getElementById("input_num");
