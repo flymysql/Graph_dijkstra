@@ -107,7 +107,8 @@ Dijkstra单源最短路径搜索算法
        }
        .int{
         height: 26px;
-        width: 80px;
+        width: 60px;
+        text-align: center;
         border-radius: 3px;
         border: 1px solid #3989c5;
        }
@@ -171,9 +172,11 @@ Dijkstra单源最短路径搜索算法
 <input type="button" name="" value="清空连线" class="refer" onclick="cleanline()">
 <input type="input" name="" id="input_num" value="6" class="int">
 <input type="button" name="" value="生成节点" class="refer" onclick="input()">
+<input type="button" name="" value="随机生成链路" class="refer" onclick="randomCreate(1)">
+<input type="button" name="" value="随机生成图" class="refer" onclick="randomCreate(2)">
 <input type="input" name="" id="begin" value="v0" class="int">
 <input type="button" name="" value="生成最短路径" class="refer" onclick="createPath()">
-<input type="button" name="" value="随机生成一个图" class="refer" onclick="randomCreate()">
+
 </div>
 <div class="changdiv" id="changdiv">
   输入权值并按确定更改<br>
@@ -544,12 +547,15 @@ var content="";
 
 
   //随机生成一个图
-  function randomCreate(){
+  function randomCreate(num){
   	cleanele();
-  	var inputnum=document.getElementById("input_num");
-  	var value=Math.round(Math.random()*4)+4;
-  	input_num.value=value;
-  	input();
+    var inputnum=document.getElementById("input_num");
+    var value=input_num.value;
+    if(num==2){
+      var value=Math.round(Math.random()*4)+4;
+      input_num.value=value;
+    }
+    input();
   	for (var i = value - 1; i >= 0; i--) {
   		var lines=Math.round(Math.random()*2)+1;
   		var S=new Array();
@@ -579,7 +585,7 @@ var content="";
 window.onload=function(){
   	var descripe=document.getElementById("slider");
     content=descripe.innerHTML;
-  	randomCreate();
+  	randomCreate(2);
   	descripe.innerHTML=content;
   }
 
