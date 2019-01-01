@@ -34,6 +34,10 @@ Dijkstra提出按各顶点与源点v间的路径长度的递增次序，生成�
 
 4. 再选出一个到源点v路径长度最小的顶点k,从T中删去后加入S中，再回去到第三步，如此重复，直到集合S中的包含图G的所有顶点。
 
+<a href="https://me.idealli.com/post/651cfd47.html"><img src="https://image.idealli.com/blog/18123106.jpg"></a>
+
+<a href="https://www.vultr.com/?ref=7446652"><img src="https://www.vultr.com/media/banner_1.png" width="728" height="90"></a>
+
 **部分javascript代码**
 
 ```java
